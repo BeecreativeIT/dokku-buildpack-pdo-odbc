@@ -7,8 +7,13 @@ ENV_DIR="$3"
 
 echo "-----> Compiling PDO_ODBC extension"
 
+echo "BUILD_DIR = $BUILD_DIR"
+echo "CACHE_DIR = $CACHE_DIR"
+echo "ENV_DIR = $ENV_DIR"
+
 # Trova phpize del buildpack PHP
 PHPIZE=$(find "$BUILD_DIR" -type f -name phpize | head -n 1)
+echo "PHPIZE found at: $PHPIZE"
 PHP_CONFIG=$(find "$BUILD_DIR" -type f -name php-config | head -n 1)
 PHP=$(find "$BUILD_DIR" -type f -name php | head -n 1)
 
