@@ -7,10 +7,6 @@ ENV_DIR="$3"
 
 echo "-----> Compiling PDO_ODBC extension"
 
-echo "BUILD_DIR = $BUILD_DIR"
-echo "CACHE_DIR = $CACHE_DIR"
-echo "ENV_DIR = $ENV_DIR"
-
 # Trova phpize del buildpack PHP
 PHPIZE=$(find "$BUILD_DIR" -type f -name phpize | head -n 1)
 HEROKU_PHP_BIN_CONTENT=$(ls /app/.heroku/php/bin/)
