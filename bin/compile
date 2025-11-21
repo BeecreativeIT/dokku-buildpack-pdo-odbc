@@ -14,6 +14,10 @@ echo "ENV_DIR = $ENV_DIR"
 # Trova phpize del buildpack PHP
 PHPIZE=$(find "$BUILD_DIR" -type f -name phpize | head -n 1)
 echo "PHPIZE found at: $PHPIZE"
+HEROKU_PHP_BIN_CONTENT=$(ls /app/.heroku/php/bin/)
+echo "HEROKU_PHP_BIN_CONTENT: $HEROKU_PHP_BIN_CONTENT"
+HEROKU_CONTENT=$(ls /app/.heroku/)
+echo "HEROKU_CONTENT: $HEROKU_CONTENT"
 
 if [ -z "$PHPIZE" ]; then
   PHPIZE=$(find "/app" -type f -name phpize | head -n 1)
