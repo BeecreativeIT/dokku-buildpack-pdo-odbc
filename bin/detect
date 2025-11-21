@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Buildpack detection script
+echo "pdo-odbc-buildpack"
+exit 0

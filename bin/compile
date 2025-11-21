@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+set -e
+
+BUILD_DIR="$1"
+CACHE_DIR="$2"
+ENV_DIR="$3"
+
+echo "-----> Compiling PDO_ODBC extension"
+
+# Trova phpize del buildpack PHP
+PHPIZE=$(find "$BUILD_DIR" -type f -name phpize | head -n 1)
+PHP_CONFIG=$(find "$BUILD_DIR" -type f -name php-config | head -n 1)
+PHP=$(find "$BUILD_DIR" -type f -name php | head -n 1)
+
+if [ -z "$PHPIZE" ]; then
+  echo "ERROR: phpize not found — ensure this buildpack runs BEFORE the PHP buildpack."
+  exit 1
+fi
+
+echo "Using phpize: $PHPIZE"
+
+# Percorso di unixODBC installato via Apt buildpack
+ODBC_PREFIX="$BUILD_DIR/.apt/usr"
+export CPPFLAGS="-I$ODBC_PREFIX/include"
+export LDFLAGS="-L$ODBC_PREFIX/lib"
+
+# Scarica i sorgenti PHP della stessa versione del runtime
+PHP_VERSION=$($PHP -r "echo PHP_VERSION;")
+echo "Detected PHP version: $PHP_VERSION"
+
+cd /tmp
+curl -sL "https://www.php.net/distributions/php-${PHP_VERSION}.tar.gz" -o php-src.tar.gz
+tar xzf php-src.tar.gz
+cd php-*/ext/pdo_odbc
+
+# Compila
+$PHPIZE
+./configure --with-pdo-odbc=unixODBC,$ODBC_PREFIX --with-php-config="$PHP_CONFIG"
+make -j4
+
+# Copia l’estensione compilata
+EXT_DIR=$($PHP_CONFIG --extension-dir)
+echo "Extension dir: $EXT_DIR"
+
+mkdir -p "$EXT_DIR"
+cp modules/pdo_odbc.so "$EXT_DIR"
+
+# Abilita estensione
+echo "extension=pdo_odbc.so" >> "$BUILD_DIR/.php.ini.d/50-pdo_odbc.ini"
+
+echo "✓ PDO_ODBC successfully built and installed"

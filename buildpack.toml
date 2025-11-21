@@ -1,0 +1,10 @@
+[buildpack]
+name = "PDO-ODBC"
+
+[publish.Ignore]
+files = [
+  ".github/",
+  "test/",
+  ".gitignore",
+  "Makefile",
+]
