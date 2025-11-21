@@ -55,7 +55,11 @@ echo "Extension dir: $EXT_DIR"
 mkdir -p "$EXT_DIR"
 cp modules/pdo_odbc.so "$EXT_DIR"
 
+INI_DIR=$($PHP_CONFIG --ini-dir)
+echo "ini dir: $INI_DIR"
+
 # Abilita estensione
-echo "extension=pdo_odbc.so" >> "$BUILD_DIR/.php.ini.d/50-pdo_odbc.ini"
+# echo "extension=pdo_odbc.so" >> "$BUILD_DIR/.php.ini.d/50-pdo_odbc.ini"
+echo "extension=pdo_odbc.so" >> "$INI_DIR/50-pdo_odbc.ini"
 
 echo "✓ PDO_ODBC successfully built and installed"
