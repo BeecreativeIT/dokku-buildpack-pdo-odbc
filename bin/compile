@@ -62,10 +62,13 @@ LIBAIO_SO_PATH=$(find "$BUILD_DIR" -type f -name libaio.so.1t64.0.2 | head -n 1)
 echo "Using libaio: $LIBAIO_SO_PATH"
 
 if [ ! -z "$LIBAIO_SO_PATH" ]; then
-  LIBAIO_SO_TARGET="$(dirname "$LIBAIO_SO_PATH")/libaio.so.1"
-  echo "linking $LIBAIO_SO_PATH -> $LIBAIO_SO_TARGET"
+  CWD=$(pwd)
+  LIBAIO_SO_DIR=$(dirname "$LIBAIO_SO_PATH")
+  cd $LIBAIO_SO_DIR
+  echo "linking libaio.so.1t64.0.2 -> libaio.so.1"
 
-  ln -s $LIBAIO_SO_PATH $LIBAIO_SO_TARGET
+  ln -s libaio.so.1t64.0.2 libaio.so.1
+  cd $CWD
 fi
 
 echo "✓ PDO_ODBC successfully built and installed"
