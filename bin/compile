@@ -58,4 +58,14 @@ echo "ini dir: $INI_DIR"
 # echo "extension=pdo_odbc.so" >> "$BUILD_DIR/.php.ini.d/50-pdo_odbc.ini"
 echo "extension=pdo_odbc.so" >> "$INI_DIR/50-pdo_odbc.ini"
 
+LIBAIO_SO_PATH=$(find "$BUILD_DIR" -type f -name libaio.so.1t64.0.2 | head -n 1)
+echo "Using libaio: $LIBAIO_SO_PATH"
+
+if [ ! -z "$LIBAIO_SO_PATH" ]; then
+  LIBAIO_SO_TARGET="$(dirname "$LIBAIO_SO_PATH")/libaio.so.1"
+  echo "linking $LIBAIO_SO_PATH -> $LIBAIO_SO_TARGET"
+
+  ln -s $LIBAIO_SO_PATH $LIBAIO_SO_TARGET
+fi
+
 echo "✓ PDO_ODBC successfully built and installed"
